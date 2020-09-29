@@ -11,8 +11,10 @@ int daysSinceLastChange = currentTime - changes[changes.size()-1].getCreated()
 return changes.toString()
 
 -----------------------------
+def status1="Blocked"
+
 List<Long> rt1 = [0L]
-changeHistoryManager.getChangeItemsForField (issue, "status").reverse().each {ChangeItemBean item ->
+changeHistoryManager.getChangeItemsForField (issue, "blocked").reverse().each {ChangeItemBean item ->
 
 def timeDiff = System.currentTimeMillis() - item.created.getTime()
 if (item.fromString == status1) {
