@@ -9,3 +9,20 @@ List changes = changeHistoryManager.getChangeItemsForField(issue, "FieldName")
 Timestamp currentTime = new Timestamp(System.currentTimeMillis())
 int daysSinceLastChange = currentTime - changes[changes.size()-1].getCreated()
 return changes.toString()
+
+-----------------------------
+List<Long> rt1 = [0L]
+changeHistoryManager.getChangeItemsForField (issue, "status").reverse().each {ChangeItemBean item ->
+
+def timeDiff = System.currentTimeMillis() - item.created.getTime()
+if (item.fromString == status1) {
+rt1 << -timeDiff
+}
+if (item.toString == status1){
+rt1 << timeDiff
+}
+
+}
+
+def status1Time = DateUtils.getDurationString(Math.round((rt1.sum().toString().toDouble() / 1000) as Double)) ?: "0m" as String
+return " Workflow Status = " + status1Time
