@@ -1,20 +1,31 @@
+//Required Imports
+import com.atlassian.core.util.DateUtils
 import com.atlassian.jira.component.ComponentAccessor
-import com.atlassian.jira.issue.changehistory.ChangeHistoryManager
-import java.sql.Timestamp
+import com.atlassian.jira.issue.history.ChangeItemBean
+import com.atlassian.jira.issue.Issue
 
-def issueManager = ComponentAccessor.getIssueManager()
-def issue = issueManager.getIssueObject("IssueNumber")
-ChangeHistoryManager changeHistoryManager = ComponentAccessor.getChangeHistoryManager()
-List changes = changeHistoryManager.getChangeItemsForField(issue, "FieldName")
-Timestamp currentTime = new Timestamp(System.currentTimeMillis())
-int daysSinceLastChange = currentTime - changes[changes.size()-1].getCreated()
-return changes.toString()
+// Get a pointer to the Change History Manager
+def changeHistoryManager = ComponentAccessor.changeHistoryManager
 
------------------------------
-def status1="Blocked"
+// Ensure that the script field does not store cached values and always dynamically re calculates the values every time a page is laoded.
+enableCache = {-> false}
 
+// Define the statuses to report on below
+def status1 = "Workflow Status"
+def status2 = "Status"
+def status3 = "Status"
+def status4 = "Status"
+def status5 = "Status"
+def status6 = "Status"
+def status7 = "Status"
+def status8 = "Status"
+
+// Get a pointer to the current issue
+def issue = issue as Issue
+
+// Get the Suspect time
 List<Long> rt1 = [0L]
-changeHistoryManager.getChangeItemsForField (issue, "blocked").reverse().each {ChangeItemBean item ->
+changeHistoryManager.getChangeItemsForField (issue, "status").reverse().each {ChangeItemBean item ->
 
 def timeDiff = System.currentTimeMillis() - item.created.getTime()
 if (item.fromString == status1) {
@@ -26,5 +37,114 @@ rt1 << timeDiff
 
 }
 
+// Get the Step 2 Time
+List<Long> rt2 = [0L]
+changeHistoryManager.getChangeItemsForField (issue, "status").reverse().each {ChangeItemBean item ->
+
+def timeDiff = System.currentTimeMillis() - item.created.getTime()
+if (item.fromString == status2) {
+rt2 << -timeDiff
+}
+if (item.toString == status2){
+rt2 << timeDiff
+}
+
+}
+
+// Get the Step 3 Time
+List<Long> rt3 = [0L]
+changeHistoryManager.getChangeItemsForField (issue, "status").reverse().each {ChangeItemBean item ->
+
+def timeDiff = System.currentTimeMillis() - item.created.getTime()
+if (item.fromString == status3) {
+rt3 << -timeDiff
+}
+if (item.toString == status3){
+rt3 << timeDiff
+}
+
+}
+
+// Get the Step 4 Time
+List<Long> rt4 = [0L]
+changeHistoryManager.getChangeItemsForField (issue, "status").reverse().each {ChangeItemBean item ->
+
+def timeDiff = System.currentTimeMillis() - item.created.getTime()
+if (item.fromString == status4) {
+rt4 << -timeDiff
+}
+if (item.toString == status4){
+rt4 << timeDiff
+}
+
+}
+
+// Get the Step 5 Time
+List<Long> rt5 = [0L]
+changeHistoryManager.getChangeItemsForField (issue, "status").reverse().each {ChangeItemBean item ->
+
+def timeDiff = System.currentTimeMillis() - item.created.getTime()
+if (item.fromString == status5) {
+rt5 << -timeDiff
+}
+if (item.toString == status5){
+rt5 << timeDiff
+}
+
+}
+
+// Get the Step 6 Time
+List<Long> rt6 = [0L]
+changeHistoryManager.getChangeItemsForField (issue, "status").reverse().each {ChangeItemBean item ->
+
+def timeDiff = System.currentTimeMillis() - item.created.getTime()
+if (item.fromString == status6) {
+rt6 << -timeDiff
+}
+if (item.toString == status6){
+rt6 << timeDiff
+}
+
+}
+
+// Get the Step 7 Time
+List<Long> rt7 = [0L]
+changeHistoryManager.getChangeItemsForField (issue, "status").reverse().each {ChangeItemBean item ->
+
+def timeDiff = System.currentTimeMillis() - item.created.getTime()
+if (item.fromString == status7) {
+rt7 << -timeDiff
+}
+if (item.toString == status7){
+rt7 << timeDiff
+}
+
+}
+
+// Get the Step 8 Time
+List<Long> rt8 = [0L]
+changeHistoryManager.getChangeItemsForField (issue, "status").reverse().each {ChangeItemBean item ->
+
+def timeDiff = System.currentTimeMillis() - item.created.getTime()
+if (item.fromString == status8) {
+rt8 << -timeDiff
+}
+if (item.toString == status8){
+rt8 << timeDiff
+}
+
+}
+
+// Return times for each status
+// NOTE: doesn't show anything if less than 60 seconds
 def status1Time = DateUtils.getDurationString(Math.round((rt1.sum().toString().toDouble() / 1000) as Double)) ?: "0m" as String
-return " Workflow Status = " + status1Time
+def status2Time = DateUtils.getDurationString(Math.round((rt2.sum().toString().toDouble() / 1000) as Double)) ?: "0m" as String
+def status3Time = DateUtils.getDurationString(Math.round((rt3.sum().toString().toDouble() / 1000) as Double)) ?: "0m" as String
+def status4Time = DateUtils.getDurationString(Math.round((rt4.sum().toString().toDouble() / 1000) as Double)) ?: "0m" as String
+def status5Time = DateUtils.getDurationString(Math.round((rt5.sum().toString().toDouble() / 1000) as Double)) ?: "0m" as String
+def status6Time = DateUtils.getDurationString(Math.round((rt6.sum().toString().toDouble() / 1000) as Double)) ?: "0m" as String
+def status7Time = DateUtils.getDurationString(Math.round((rt7.sum().toString().toDouble() / 1000) as Double)) ?: "0m" as String
+def status8Time = DateUtils.getDurationString(Math.round((rt8.sum().toString().toDouble() / 1000) as Double)) ?: "0m" as String
+
+return " Workflow Status = " + status1Time + "<br/>"+ " Workflow Status = " + status2Time + "<br/>"+ " Workflow Status = " + status3Time + "<br/>"+ " Workflow Status = " + status4Time + "<br/>"+ " Workflow Status = " + status5Time + "<br/>"+ " Workflow Status = " + status6Time
+
