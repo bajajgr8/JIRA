@@ -1,0 +1,11 @@
+import com.atlassian.jira.component.ComponentAccessor
+import com.atlassian.jira.issue.changehistory.ChangeHistoryManager
+import java.sql.Timestamp
+
+def issueManager = ComponentAccessor.getIssueManager()
+def issue = issueManager.getIssueObject("IssueNumber")
+ChangeHistoryManager changeHistoryManager = ComponentAccessor.getChangeHistoryManager()
+List changes = changeHistoryManager.getChangeItemsForField(issue, "FieldName")
+Timestamp currentTime = new Timestamp(System.currentTimeMillis())
+int daysSinceLastChange = currentTime - changes[changes.size()-1].getCreated()
+return changes.toString()
