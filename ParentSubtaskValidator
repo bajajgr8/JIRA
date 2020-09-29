@@ -1,0 +1,36 @@
+import com.atlassian.jira.issue.customfields.option.Option
+import com.atlassian.jira.component.ComponentAccessor
+
+//def measurePlannedField = getFieldByName("Planned Measure Field")
+
+def customField= getFieldById(fieldChanged)
+def parent = getFieldById("parentIssueId")
+// Get the all the options of Indicators
+//def cfObj = customFieldManager.getCustomFieldObject(customField.getFieldId())
+Long parentIssueId = parent.getFormValue() as Long
+def issueManager = ComponentAccessor.getIssueManager()
+def parentIssue = issueManager.getIssueObject(parentIssueId)
+def customFieldManager = ComponentAccessor.getCustomFieldManager()
+def cf = customFieldManager.getCustomFieldObjectByName("Action Plan")
+
+//if (!underlyingIssue.isSubTask()) {
+    //return true
+//}
+
+//def parent = underlyingIssue.parentObject.getCustomFieldValue(cf).toString()
+//def selectedValue = underlyingIssue.getCustomFieldValue(cf).toString()
+//!parent.subTaskObjects.any { subtask ->
+//    subtask.getCustomFieldValue(cf) == selectedValue
+//}
+def parentValue = cf.getValue(parentIssue)
+//if(customField.value!="disc"){
+   // log.debug "Issue is $underlyingIssue"
+// customField.setError(parentValue.toString())
+//}
+if(parentValue.toString().contains(customField.value.toString())){
+   // log.debug "Issue is $underlyingIssue"
+ customField.clearError();
+}
+   else{
+    customField.setError("Please enter value related to Parent Artifact Acronym")
+}
