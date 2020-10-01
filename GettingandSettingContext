@@ -1,0 +1,39 @@
+import com.atlassian.jira.component.ComponentAccessor;
+import com.atlassian.jira.issue.fields.CustomField;
+import com.atlassian.jira.issue.fields.ConfigurableField;
+import com.atlassian.jira.issue.CustomFieldManager;
+import com.atlassian.jira.issue.fields.config.FieldConfigScheme;
+import com.atlassian.jira.issue.fields.config.manager.FieldConfigSchemeManager;
+import com.atlassian.jira.issue.fields.FieldManager;
+import com.atlassian.jira.issue.context.ProjectContext;
+import com.atlassian.jira.issue.context.JiraContextNode;
+import java.util.ArrayList;
+    CustomFieldManager customFieldManager = ComponentAccessor.getCustomFieldManager();
+    FieldConfigSchemeManager fieldConfigSchemeManager = ComponentAccessor.getFieldConfigSchemeManager();
+    FieldManager fieldManager = ComponentAccessor.getFieldManager();
+    
+    ArrayList<CustomField> customFields = new ArrayList<CustomField>();
+    
+    customFields.add(customFieldManager.getCustomFieldObject(20348L));
+    
+    //ProjectContext newProjectContext = new ProjectContext(10100L);
+    
+    for (customField in customFields) {
+        println customField.getId();
+        List<FieldConfigScheme> fieldConfigSchemes = customField.getConfigurationSchemes();
+        
+        FieldConfigScheme firstScheme = fieldConfigSchemes.get(0);
+        return firstScheme.getAssociatedProjectObjects().get(0).getName()
+        List<JiraContextNode> existingSchemes = firstScheme.getContexts();
+      //  JiraContextNode newContextNode = (JiraContextNode) newProjectContext;
+        
+        List<JiraContextNode> updatedSchemes = new ArrayList<JiraContextNode>();
+        for (scheme in existingSchemes) {
+            updatedSchemes.add(scheme);
+        }
+        //updatedSchemes.add(newContextNode);
+        
+        fieldConfigSchemeManager.updateFieldConfigScheme(firstScheme, updatedSchemes, (ConfigurableField) customField);
+        
+    }
+    customFieldManager.refresh();
