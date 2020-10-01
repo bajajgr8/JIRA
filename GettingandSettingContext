@@ -12,28 +12,35 @@ import java.util.ArrayList;
     FieldConfigSchemeManager fieldConfigSchemeManager = ComponentAccessor.getFieldConfigSchemeManager();
     FieldManager fieldManager = ComponentAccessor.getFieldManager();
     
-    ArrayList<CustomField> customFields = new ArrayList<CustomField>();
-    
-    customFields.add(customFieldManager.getCustomFieldObject(20348L));
+    ArrayList<CustomField> customFields = customFieldManager.getCustomFieldObjects()
+    String finalResult=""
+    //customFields.add(customFieldManager.getCustomFieldObject(20348L));
     
     //ProjectContext newProjectContext = new ProjectContext(10100L);
     
-    for (customField in customFields) {
+    for (customField in customFields ) {
+		if(customField.isGlobal()){
+		
         println customField.getId();
         List<FieldConfigScheme> fieldConfigSchemes = customField.getConfigurationSchemes();
         
         FieldConfigScheme firstScheme = fieldConfigSchemes.get(0);
-        return firstScheme.getAssociatedProjectObjects().get(0).getName()
+        def Projects firstScheme.getAssociatedProjectObjects()
+        Projects.each{ project ->
+                finalResult=project.getName()+" " + customField.toString()+"\n"
+                }
         List<JiraContextNode> existingSchemes = firstScheme.getContexts();
       //  JiraContextNode newContextNode = (JiraContextNode) newProjectContext;
         
-        List<JiraContextNode> updatedSchemes = new ArrayList<JiraContextNode>();
-        for (scheme in existingSchemes) {
-            updatedSchemes.add(scheme);
-        }
+        //List<JiraContextNode> updatedSchemes = new ArrayList<JiraContextNode>();
+        //for (scheme in existingSchemes) {
+         //   updatedSchemes.add(scheme);
+        //}
         //updatedSchemes.add(newContextNode);
         
-        fieldConfigSchemeManager.updateFieldConfigScheme(firstScheme, updatedSchemes, (ConfigurableField) customField);
+        //fieldConfigSchemeManager.updateFieldConfigScheme(firstScheme, updatedSchemes, (ConfigurableField) customField);
+        return finalResult
         
     }
-    customFieldManager.refresh();
+	}
+    //customFieldManager.refresh();
