@@ -1,0 +1,93 @@
+import com.atlassian.jira.issue.fields.CustomField;
+import com.atlassian.jira.issue.fields.FieldManager;
+import com.atlassian.jira.issue.fields.config.FieldConfig;
+import com.atlassian.jira.issue.fields.config.manager.FieldConfigSchemeManager;
+import com.atlassian.jira.issue.fields.screen.FieldScreen;
+import com.atlassian.jira.issue.fields.screen.FieldScreenManager;
+import com.atlassian.jira.issue.fields.screen.FieldScreenScheme;
+import com.atlassian.jira.issue.fields.screen.FieldScreenSchemeItem;
+import com.atlassian.jira.issue.fields.screen.FieldScreenSchemeManager;
+import com.atlassian.jira.issue.fields.screen.FieldScreenTab;
+import com.atlassian.jira.component.ComponentAccessor;
+import com.atlassian.jira.issue.fields.CustomField;
+import com.atlassian.jira.issue.fields.ConfigurableField;
+import com.atlassian.jira.issue.CustomFieldManager;
+import com.atlassian.jira.issue.fields.config.FieldConfigScheme;
+import com.atlassian.jira.issue.fields.config.manager.FieldConfigSchemeManager;
+import com.atlassian.jira.issue.fields.FieldManager;
+import com.atlassian.jira.issue.context.ProjectContext;
+import com.atlassian.jira.issue.context.JiraContextNode;
+import java.util.ArrayList;
+    CustomFieldManager customFieldManager = ComponentAccessor.getCustomFieldManager();
+    FieldConfigSchemeManager fieldConfigSchemeManager = ComponentAccessor.getFieldConfigSchemeManager();
+    FieldManager fieldManager = ComponentAccessor.getFieldManager();
+    
+   // def customFields = customFieldManager.getCustomFieldObjects()
+			
+	
+	FieldScreenManager fieldScreenManager = ComponentAccessor.getFieldScreenManager()
+	def fieldScreens=fieldScreenManager.getFieldScreens();
+	
+	
+	//return fieldText
+	ArrayList<CustomField> customFields=new ArrayList<CustomField>();
+		customFields.add(customFieldManager.getCustomFieldObject(14300))
+		customFields.add(customFieldManager.getCustomFieldObject(21046))
+		customFields.add(customFieldManager.getCustomFieldObject(14300))
+	//	def cf=customFieldManager.getCustomFieldObject(14300)
+	    
+String finalResult=""
+//	fieldScreens.each{ fieldScreen ->
+  //           
+    //                finalResult+="Screen Name= " + fieldScreen.getName() + fieldScreen.containsField('customfield_14300')
+      //              
+        //     }
+    //customFields.add(customFieldManager.getCustomFieldObject(20348L));
+    
+    //ProjectContext newProjectContext = new ProjectContext(10100L);
+    //def fieldScreens=
+     customFields.each{ customField ->
+		if(customField.isGlobal()){
+		
+        //println customField.getId();
+        //List<FieldConfigScheme> fieldConfigSchemes = customField.getConfigurationSchemes();
+        
+        //fieldConfigSchemes.each{ fieldConfigScheme ->
+       // 
+         // finalResult+=customField.toString()+"::"
+        //def Projects= fieldConfigScheme.getAssociatedProjectObjects()
+       // Projects.each{ project ->
+        //        finalResult+=project.getName()+", "
+        //	}
+       // }
+            finalResult+="Field Name :: "+customField.toString()+" -"
+            fieldScreens.each{ fieldScreen ->
+                if(fieldScreen.containsField("customfield_"+customField.getIdAsLong())){
+                    finalResult+="Screen Name || " + fieldScreen.getName() + " ::  "
+                    
+      //          }
+        //    }
+    
+	//}
+     				}
+            }
+        }
+        
+       
+     }
+ return finalResult
+        //List<JiraContextNode> existingSchemes = firstScheme.getContexts();
+      //  JiraContextNode newContextNode = (JiraContextNode) newProjectContext;
+        
+        //List<JiraContextNode> updatedSchemes = new ArrayList<JiraContextNode>();
+        //for (scheme in existingSchemes) {
+         //   updatedSchemes.add(scheme);
+        //}
+        //updatedSchemes.add(newContextNode);
+        
+        //fieldConfigSchemeManager.updateFieldConfigScheme(firstScheme, updatedSchemes, (ConfigurableField) customField);
+        //return finalResult
+        
+    //}
+	//}
+    //customFieldManager.refresh();
