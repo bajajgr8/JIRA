@@ -1,0 +1,24 @@
+if(subtask){
+	def fieldToCopy = fieldManager.allAvailableNavigableFields.find { it.name == "Artifact Acronym" }
+if (!fieldToCopy) {
+    log.info "Could not find field with name $fieldNameToCopy"
+    return
+}
+	def parentIssue = issue.parentObject
+	def fieldToCopyId = fieldToCopy.id
+    def customField = ComponentAccessor.customFieldManager.getCustomFieldObject(fieldToCopyId)
+    def linkedIssueCustomFieldValue = parentIssue.getCustomFieldValue(customField)
+    issue.setCustomFieldValue(customField, linkedIssueCustomFieldValue)
+        break
+}else{
+	def subtasks=issue.getSubTaskObjects()
+	subtasks.each { subTask ->
+	def cf=ComponentAccessor.customFieldManager.getCustomFieldObjectByName("Artifact Acronym")
+	def parentCfValue= transientVars["issue"].getCustomFieldValue(cf)
+	
+	subtasks.setCustomFieldValue(cf,parentCfValue)
+	
+		
+		
+	}
+	
