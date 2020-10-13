@@ -1,24 +1,62 @@
-if(subtask){
-	def fieldToCopy = fieldManager.allAvailableNavigableFields.find { it.name == "Artifact Acronym" }
-if (!fieldToCopy) {
-    log.info "Could not find field with name $fieldNameToCopy"
-    return
-}
-	def parentIssue = issue.parentObject
-	def fieldToCopyId = fieldToCopy.id
-    def customField = ComponentAccessor.customFieldManager.getCustomFieldObject(fieldToCopyId)
-    def linkedIssueCustomFieldValue = parentIssue.getCustomFieldValue(customField)
-    issue.setCustomFieldValue(customField, linkedIssueCustomFieldValue)
-        break
+import com.atlassian.jira.event.issue.AbstractIssueEventListener
+import com.atlassian.jira.event.issue.IssueEvent
+import com.atlassian.jira.component.ComponentAccessor
+import com.atlassian.jira.issue.fields.CustomField
+import java.sql.Timestamp
+import com.atlassian.jira.event.issue.AbstractIssueEventListener
+import com.atlassian.jira.event.issue.IssueEvent
+import org.apache.log4j.Category
+import com.atlassian.jira.issue.MutableIssue
+import com.atlassian.jira.bc.issue.IssueService
+import com.atlassian.jira.issue.util.DefaultIssueChangeHolder
+import com.atlassian.jira.issue.index.IssueIndexingService
+def issueIndexManager = ComponentAccessor.getComponent(IssueIndexingService)
+import com.atlassian.jira.issue.index.IssueIndexingService
+import com.atlassian.jira.event.type.EventDispatchOption
+import com.atlassian.jira.util.ImportUtils
+import com.atlassian.jira.issue.history.ChangeLogUtils
+
+
+IssueService issueService = ComponentAccessor.getIssueService()	
+
+def issueManager = ComponentAccessor.getIssueManager()
+
+def changeHistoryManager = ComponentAccessor.getChangeHistoryManager()
+def customFieldManager = ComponentAccessor.getCustomFieldManager();
+def issueId=event.issue.getId()
+def issue=issueManager.getIssueObject(issueId)
+def changeHolder = new DefaultIssueChangeHolder()
+
+def cf=ComponentAccessor.customFieldManager.getCustomFieldObjectByName("Action ID")
+boolean subtaskbool=issue.isSubTask()
+if(subtaskbool){
+    def parentTask=issue.getParentObject()
+    def parentCfValue= parentTask.getCustomFieldValue(cf)
+    issue.setCustomFieldValue(cf,parentCfValue)
+  //  UpdateValidationResult(issue, errors,changeHolder)   
+    
 }else{
-	def subtasks=issue.getSubTaskObjects()
-	subtasks.each { subTask ->
-	def cf=ComponentAccessor.customFieldManager.getCustomFieldObjectByName("Artifact Acronym")
-	def parentCfValue= transientVars["issue"].getCustomFieldValue(cf)
+    def subtasks=issue.getSubTaskObjects()
+    
 	
-	subtasks.setCustomFieldValue(cf,parentCfValue)
+    subtasks.each { subtask ->
+	def subIssue=issueManager.getIssueObject(subtask.getId())
+	def parentCfValue= issue.getCustomFieldValue(cf)
 	
-		
-		
-	}
+	subIssue.setCustomFieldValue(cf,parentCfValue)
 	
+    
+    }
+
+}
+//issueIndexManager.reIndex(issue)
+
+
+
+
+issueManager.updateIssue(event.user, issue, EventDispatchOption.DO_NOT_DISPATCH, false)
+
+def wasIndexing = ImportUtils.isIndexIssues() 
+ImportUtils.setIndexIssues(true) 
+//indexingService.reIndex(issue)
+ImportUtils.setIndexIssues(wasIndexing)
