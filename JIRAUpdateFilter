@@ -1,0 +1,27 @@
+import com.atlassian.jira.ComponentManager
+import com.atlassian.jira.bc.filter.SearchRequestService
+import com.atlassian.jira.bc.JiraServiceContext
+import com.atlassian.query.*
+import com.atlassian.jira.bc.JiraServiceContextImpl
+
+def cm = ComponentManager.getInstance()
+def searchRequestService = cm.getSearchRequestService()
+def authenticationContext = cm.getJiraAuthenticationContext()
+def searchService = cm.getSearchService()
+def user = authenticationContext.getLoggedInUser()
+def ctx = new JiraServiceContextImpl(user)
+
+def output = ""
+searchRequestService.getOwnedFilters(user).each() { searchRequest ->
+  def query = searchRequest.query
+  def queryString = searchService.getJqlString(query)
+  if (queryString.contains("XWiki Enterprise Manager")) {
+    String newQueryString = queryString.replace("\"XWiki Enterprise Manager\"", "\"{RETIRED} XWiki Enterprise Manager\"")
+    def newQuery = searchService.parseQuery(user, newQueryString).query
+    searchRequest.setQuery(newQuery)    
+//    searchRequestService.updateFilter(ctx, searchRequest) 
+    output = "${output}${queryString}\n"
+  }
+}
+
+return output
