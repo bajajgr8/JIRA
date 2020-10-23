@@ -1,0 +1,44 @@
+import com.atlassian.jira.user.ApplicationUser
+import com.atlassian.jira.component.ComponentAccessor
+import com.atlassian.jira.bc.filter.SearchRequestService
+import com.atlassian.jira.issue.search.SearchRequest
+import com.atlassian.jira.bc.user.search.UserSearchParams
+import com.atlassian.jira.bc.user.search.UserSearchService
+import java.lang.StringBuilder
+
+// Change below statuses to the values you want to search for
+String STATUS1 = 'STATUS1'
+String STATUS2 = 'STATUS2'
+
+//maxUsers must be set as per number of users in JIRA Instance setting it default to 10k
+int maxUsers=10000;
+
+//initializing instance of SearchRequestService
+SearchRequestService searchRequestService = ComponentAccessor.getComponent(SearchRequestService.class)
+
+//initializing UserSearchService
+UserSearchService userSearchService = ComponentAccessor.getComponent(UserSearchService)
+	
+StringBuilder output = StringBuilder.newInstance()
+output << "<pre>\n"
+
+UserSearchParams userSearchParams = new UserSearchParams.Builder()
+    .allowEmptyQuery(true)
+    .ignorePermissionCheck(true)
+    .maxResults(10000) 
+    .build()
+userSearchService.findUsers("", userSearchParams).each{ApplicationUser filter_owner ->
+    try {
+        searchRequestService.getOwnedFilters(filter_owner).each{SearchRequest filter->
+            String jql = filter.getQuery().toString()
+            if (jql.contains(STATUS1) || jql.contains(STATUS1)) {
+                output << "${filter_owner.displayName}, ${filter.name}, ${filter.getPermissions().isPrivate() ? 'Private' : 'Shared'}, ${jql}\n"
+            }
+        }
+    } catch (Exception e) {
+           output << "Unable to get filters for ${filter_owner.displayName} due to ${e}"     
+    }
+}
+
+output << "</pre>"
+output.toString()
