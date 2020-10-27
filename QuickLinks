@@ -1,2 +1,14 @@
 https://www.glintech.com/blog/sharing-your-filter-editing-burdens-across-the-team
 https://gist.github.com/jechlin/969edd1ed05721492f063c55891c4b7a
+
+
+cPrime code SIL:
+JFilter filter;
+filter.id=10405;
+filter.name = "Updatedname";
+filter.description = "New Description";
+filter.query = "project=TEST AND assignee=admin";
+filter.owner = "admin";
+boolean a = admUpdateFilter(filter);
+runnerLog("Filter updated? "+ a + "\n" +
+          "The update filter is: "+ admGetFilterById("10405"));
