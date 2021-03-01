@@ -1,0 +1,95 @@
+import requests
+import json
+import base64
+
+# Base encode email and api token
+cred =  "Basic " + base64.b64encode(b'sourabhbajaj92@gmail.com:9N5N3OVeS04Qq6kU3bXh5E96').decode("utf-8") 
+# Set header parameters
+#cred = "Basic LW4gc291cmFiaGJhamFqOTJAZ21haWwuY29tOjlONU4zT1ZlUzA0UXE2a1UzYlhoNUU5NiANCg=="
+headers = {"Accept": "application/json",   "Content-Type": "application/json",   "Authorization" : cred}
+
+
+def getData(json_data):
+	global temp;
+
+	for item in json_data["issues"]:
+			
+			temp+=item["id"] + "," + item["key"] + "," + \
+			item["fields"]["issuetype"]["name"] + "," + \
+			item["fields"]["created"]+ "," + \
+			item["fields"]["creator"]["displayName"] + "," + \
+			item["fields"]["status"]["name"] + "," + \
+			item["fields"]["summary"] +"\n"
+	return temp;
+
+
+def getResponse(url):
+	return requests.request("GET",url,headers=headers)
+
+#Enter your project key here
+#projectKey = "PKY"
+#By Default we fetch result from zero 
+start_at=0
+# Update your site url 
+url = "https://sourabhbajaj.atlassian.net/rest/api/3/search?startAt="+f'{start_at}'
+
+# Send request and get response
+
+response = requests.request(
+   "GET", 
+   url,
+   headers=headers
+)
+
+# Decode Json string to Python
+
+json_data = json.loads(response.text)
+
+total_number_of_issues=json_data["total"]
+
+start_at=json_data["startAt"]
+
+max_results=json_data["maxResults"]
+
+#writing data on file for test
+file=open("demofile.csv",'w')
+#file.write(json.dumps(json_data));
+#file.close()
+#print(json_data)
+
+
+
+global temp
+temp=""
+jira_data=""
+loops=(int)(total_number_of_issues/max_results)
+data=[]
+# Display issues
+for x in range(loops):
+	max_number_of_issues_processed = start_at + max_results
+	
+	#temp=""
+	if max_number_of_issues_processed < total_number_of_issues:
+		start_at = max_number_of_issues_processed
+		url="https://sourabhbajaj.atlassian.net/rest/api/3/search?startAt="+f'{start_at}'
+		response=getResponse(url)
+		json_data = json.loads(response.text)
+		jira_data=jira_data+getData(json_data)	
+			
+		
+	else:
+		#file.write(temp)
+		file.close()
+		break
+		
+file.write(jira_data)
+#print(data);
+	
+	
+
+
+		
+
+	
+		
+		
