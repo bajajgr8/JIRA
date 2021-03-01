@@ -11,15 +11,14 @@ headers = {"Accept": "application/json",   "Content-Type": "application/json",  
 
 def getData(json_data):
 	global temp;
-
+	temp=""
 	for item in json_data["issues"]:
-			
-			temp+=item["id"] + "," + item["key"] + "," + \
+			temp+=(item["id"] + "," + item["key"] + "," + \
 			item["fields"]["issuetype"]["name"] + "," + \
 			item["fields"]["created"]+ "," + \
 			item["fields"]["creator"]["displayName"] + "," + \
 			item["fields"]["status"]["name"] + "," + \
-			item["fields"]["summary"] +"\n"
+			item["fields"]["summary"] +"\n")
 	return temp;
 
 
@@ -29,9 +28,9 @@ def getResponse(url):
 #Enter your project key here
 #projectKey = "PKY"
 #By Default we fetch result from zero 
-start_at=0
+
 # Update your site url 
-url = "https://sourabhbajaj.atlassian.net/rest/api/3/search?startAt="+f'{start_at}'
+url = "https://sourabhbajaj.atlassian.net/rest/api/3/search"
 
 # Send request and get response
 
@@ -45,10 +44,13 @@ response = requests.request(
 
 json_data = json.loads(response.text)
 
+global total_number_of_issues
 total_number_of_issues=json_data["total"]
 
+global start_at
 start_at=json_data["startAt"]
 
+global max_results
 max_results=json_data["maxResults"]
 
 #writing data on file for test
@@ -64,26 +66,34 @@ temp=""
 jira_data=""
 loops=(int)(total_number_of_issues/max_results)
 data=[]
+counter=0;
 # Display issues
+
+
+json_data = json.loads(response.text)
+jira_data=jira_data+getData(json_data)
 for x in range(loops):
 	max_number_of_issues_processed = start_at + max_results
 	
 	#temp=""
 	if max_number_of_issues_processed < total_number_of_issues:
 		start_at = max_number_of_issues_processed
+		#print(start_at)
 		url="https://sourabhbajaj.atlassian.net/rest/api/3/search?startAt="+f'{start_at}'
+		#print(url)
 		response=getResponse(url)
-		json_data = json.loads(response.text)
-		jira_data=jira_data+getData(json_data)	
-			
 		
+		json_data = json.loads(response.text)
+		jira_data=jira_data+getData(json_data)
 	else:
-		#file.write(temp)
+		file.write(jira_data)	#file.write(temp)
 		file.close()
 		break
 		
-file.write(jira_data)
+
 #print(data);
+file.write(jira_data)	#file.write(temp)
+file.close()
 	
 	
 
