@@ -3,9 +3,9 @@ import json
 import base64
 
 # Base encode email and api token
-cred =  "Basic " + base64.b64encode(b'sourabhbajaj92@gmail.com:9N5N3OVeS04Qq6kU3bXh5E96').decode("utf-8") 
+cred =  "Basic " + base64.b64encode(b'sourabhbajaj92@gmail.com:9ajsbd').decode("utf-8") 
+
 # Set header parameters
-#cred = "Basic LW4gc291cmFiaGJhamFqOTJAZ21haWwuY29tOjlONU4zT1ZlUzA0UXE2a1UzYlhoNUU5NiANCg=="
 headers = {"Accept": "application/json",   "Content-Type": "application/json",   "Authorization" : cred}
 
 
@@ -25,9 +25,6 @@ def getData(json_data):
 def getResponse(url):
 	return requests.request("GET",url,headers=headers)
 
-#Enter your project key here
-#projectKey = "PKY"
-#By Default we fetch result from zero 
 
 # Update your site url 
 url = "https://sourabhbajaj.atlassian.net/rest/api/3/search"
