@@ -18,6 +18,11 @@ def getData(json_data):
 			item["fields"]["created"]+ "," + \
 			item["fields"]["creator"]["displayName"] + "," + \
 			item["fields"]["status"]["name"] + "," + \
+			item["fields"]["summary"])
+			if(bool(item["fields"]["customfield_13630"])):
+				temp=temp+","+item["fields"]["customfield_13630"]["value"]+"\n"
+			else:
+				temp=temp+"\n"
 			item["fields"]["summary"] +"\n")
 	return temp;
 
