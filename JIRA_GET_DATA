@@ -83,8 +83,8 @@ for x in range(loops):
 		json_data = json.loads(response.text)
 		jira_data=jira_data+getData(json_data)
 	else:
-		file.write(jira_data)	#file.write(temp)
-		file.close()
+		#file.write(jira_data)	#file.write(temp)
+		#file.close()
 		break
 		
 
