@@ -1,0 +1,93 @@
+import requests
+import json
+import base64
+
+# Base encode email and api token
+cred =  "Basic " + base64.b64encode(b'sourabhbajaj92@gmail.com:9ajsbd').decode("utf-8") 
+
+# Set header parameters
+headers = {"Accept": "application/json",   "Content-Type": "application/json",   "Authorization" : cred}
+
+
+
+
+def getResponse(url):
+	return requests.request("GET",url,headers=headers)
+
+
+# Update your site url 
+url = "https://api.tempo.io/core/3/worklogs"
+
+
+# Send request and get response
+
+response = requests.request(
+   "GET", 
+   url,
+   headers=headers
+)
+
+# Decode Json string to Python
+
+json_data = json.loads(response.text)
+print(json_data)
+"""
+global total_number_of_issues
+total_number_of_issues=json_data["total"]
+
+global start_at
+start_at=json_data["startAt"]
+
+global max_results
+max_results=json_data["maxResults"]
+
+#writing data on file for test
+file=open("demofile.csv",'w')
+#file.write(json.dumps(json_data));
+#file.close()
+#print(json_data)
+
+
+
+global temp
+temp=""
+jira_data=""
+loops=(int)(total_number_of_issues/max_results)
+data=[]
+counter=0;
+# Display issues
+
+
+json_data = json.loads(response.text)
+jira_data=jira_data+getData(json_data)
+for x in range(loops):
+	max_number_of_issues_processed = start_at + max_results
+	
+	#temp=""
+	if max_number_of_issues_processed < total_number_of_issues:
+		start_at = max_number_of_issues_processed
+		#print(start_at)
+		url="https://sourabhbajaj.atlassian.net/rest/api/3/search?startAt="+f'{start_at}'
+		#print(url)
+		response=getResponse(url)
+		
+		json_data = json.loads(response.text)
+		jira_data=jira_data+getData(json_data)
+	else:
+		#file.write(jira_data)	#file.write(temp)
+		#file.close()
+		break
+		
+
+#print(data);
+file.write(jira_data)	#file.write(temp)
+file.close()
+	
+"""
+
+
+		
+
+	
+		
+		
