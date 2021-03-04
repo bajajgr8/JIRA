@@ -1,0 +1,44 @@
+import requests
+import json
+import base64
+
+# Base encode email and api token
+cred =  "Basic " + base64.b64encode(b'sourabhbajaj92@gmail.com:9ajsbd').decode("utf-8") 
+
+# Set header parameters
+headers = {"Accept": "application/json",   "Content-Type": "application/json",   "Authorization" : cred}
+
+
+def getData(json_data):
+	temp=""
+	temp+=(item["issue"]["key"] + "," + item["timeSpentSeconds"] + "\n"
+	return temp
+	
+
+
+def getResponse(url):
+	return requests.request("GET",url,headers=headers)
+
+
+# Update your site url 
+url = "https://api.tempo.io/core/3/worklogs"
+
+
+# Send request and get response
+
+response = requests.request(
+   "GET", 
+   url,
+   headers=headers
+)
+
+# Decode Json string to Python
+
+json_data = json.loads(response.text)
+#print(json_data)
+
+tempoData=""
+tempoData+=getData(json_data)
+file=open("tempoData.csv",'w')
+file.write(tempoData)
+file.close;
