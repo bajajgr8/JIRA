@@ -88,12 +88,16 @@ for x in range(loops):
 		
 		json_data = json.loads(response.text)
 		jira_data=jira_data+getData(json_data)
-	else:
-		#file.write(jira_data)	#file.write(temp)
-		#file.close()
-		break
-		
+		counter+=1;
+		if(counter==1):
+			file.write(jira_data) #here file will come
+			jira_data=""
+			counter=0
+			print("counter is set to zero writing records in file")
+		else:
+			continue
 
+	
 #print(data);
 file.write(jira_data)	#file.write(temp)
 file.close()
