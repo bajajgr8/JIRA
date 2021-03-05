@@ -1,0 +1,27 @@
+import requests
+import json
+import base64
+
+# Base encode email and api token
+cred =  "Basic " + base64.b64encode(b'sourabhbajaj92@gmail.com:9ajsbd').decode("utf-8") 
+
+# Set header parameters
+headers = {"Accept": "application/json",   "Content-Type": "application/json",   "Authorization" : cred}
+
+
+def getData(json_data):
+	global temp;
+	temp=""
+	for item in json_data["issues"]:
+    temp+=str(item['key']) + "~" + \
+    item['name'] + "~" + \
+    item['status'] + "~" + \
+    item['lead']['displayName'] + "~" + \
+    item['contact']['displayName'] + "~" + \
+    str(item['category']['key']) + "~" + \
+    item['category']['name'] + "~" + \
+    str(item['customer']['key'])+ "~" + \
+    item['customer']['name']+"\n"
+  return temp
+  
+    
