@@ -52,13 +52,38 @@ file=open("demofile.csv",'w')
 global temp
 temp=""
 jira_data=""
+
 loops=(int)(total_number_of_issues/max_results)
 data=[]
 counter=0;
 # Display issues
 
+tempodata="" #initializing tempo data
+count=json_data["metadata"]["count"] #initializing first count
+offset=0 #initializing offset
+myBool=true
+#running while loop until we get count value less than 1000
+while(myBool):
+	if(count==1000):
+		url="https://api.tempo.io/core/3/worklogs?from=2021-03-01&to=2021-03-02&offset="+f{offset}+"&limit=1000"
+		response=getResponse(url)
+		json_data = json.loads(response.text)
+		count=json_data["metadata"]["count"]
+		offset+=1000;
+		tempodata+=getData(json_data)
+	else:
+		url="https://api.tempo.io/core/3/worklogs?from=2021-03-01&to=2021-03-02&offset="+f{offset}+"&limit=1000"
+		response=getResponse(url)
+		json_data = json.loads(response.text)
+		tempodata+=getData(json_data)
+		myBool=false
 
-json_data = json.loads(response.text)
+		
+
+		
+	
+	
+	
 jira_data=jira_data+getData(json_data)
 for x in range(loops):
 	max_number_of_issues_processed = start_at + max_results
