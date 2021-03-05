@@ -13,15 +13,15 @@ def getData(json_data):
 	global temp;
 	temp=""
 	for item in json_data["issues"]:
-    temp+=str(item['key']) + "~" + \
-    item['name'] + "~" + \
-    item['status'] + "~" + \
-    item['lead']['displayName'] + "~" + \
-    item['contact']['displayName'] + "~" + \
-    str(item['category']['key']) + "~" + \
-    item['category']['name'] + "~" + \
-    str(item['customer']['key'])+ "~" + \
-    item['customer']['name']+"\n"
-  return temp
+		temp+=str(item['key']) + "~" + \
+		item['name'] + "~" + \
+		item['status'] + "~" + \
+		item['lead']['displayName'] + "~" + \
+		item['contact']['displayName'] + "~" + \
+		str(item['category']['key']) + "~" + \
+		item['category']['name'] + "~" + \
+		str(item['customer']['key'])+ "~" + \
+		item['customer']['name']+"\n"
+	return temp
   
     
