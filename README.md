@@ -9,3 +9,5 @@ create proxy enabled for nginx using location block below
 	proxy_next_upstream off;
     }
 ```
+run the wsgi as daemon using below command
+`uwsgi --ini webhook.ini `
